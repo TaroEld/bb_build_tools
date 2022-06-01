@@ -1,0 +1,26 @@
+{
+	"DataPath" : "G:/Games/BB/BattleBrothers/",
+	"ModFoldersPath" : "G:/Games/BB/Mods/WIP",
+	"FolderPaths" : [
+		"F:/MODDING/basegame",
+		"G:/Games/BB/Mods/WIP/mod_msu"
+	],
+	"build_systems": [
+		{
+		    "name" : "Update Mod and Launch",
+		    "working_dir" : "$project_path",
+		    "shell_cmd" : "powershell ../.utils/kill.ps1 && powershell ../.utils/build.ps1 $project_path true"
+		},
+	    {
+	        "name" : "Update Mod",
+	        "working_dir" : "$project_path",
+	        "shell_cmd" : "powershell ../.utils/build.ps1 $project_path false"
+	    },
+	    {
+	        "name" : "Run Locally",
+	        "cmd": ["sq", "$file"]
+	    }
+	]
+}
+
+	

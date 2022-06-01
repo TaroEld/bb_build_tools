@@ -1,0 +1,31 @@
+{
+	"folders":
+	[
+		{
+			"path": "F:\\MODDING\\basegame",
+		},
+		{
+			"path": "G:\\Games\\BB\\Mods\\WIP\\mod_msu",
+		},
+		{
+			"path": "G:\\Games\\BB\\Mods\\WIP\\",
+		},
+	],
+	"build_systems": [
+		{
+		    "name" : "Update Mod and Launch",
+		    "working_dir" : "$project_path",
+		    "shell_cmd" : "powershell ../.utils/kill.ps1 && powershell ../.utils/build.ps1 $project_path true",
+		},
+	    {
+	        "name" : "Update Mod",
+	        "working_dir" : "$project_path",
+	        "shell_cmd" : "powershell ../.utils/build.ps1 $project_path false",
+	    },
+	    {
+	        "name" : "Run Locally",
+	        "cmd" : ["sq", "$file"],
+	    },
+
+	],
+}
