@@ -9,7 +9,7 @@ How to use:
 Make sure you have 7zip installed, it's needed to create the zip file.
 Edit config.json: 
 	Edit the line after "ModFoldersPath" to point towards your mods folder.
-	Edit the line after "DataPath" to point towards your BattleBrothers/ folder.
+	Edit the line after "GamePath" to point towards your BattleBrothers/ folder.
 	Add any folders to "FolderPaths" that you want included in every project.
 	Ignore the rest
 
@@ -23,3 +23,7 @@ To build the zip and copy it into data, press ctrl+shift+b in sublime or VSCode 
 	"Update mod and run" will also terminate and relaunch BattleBrothers.exe.
 You can switch projects in sublime with "ctrl+shift+o".
 Alternatively, call build.ps1 while passing the path of the mod folder, and "true" as a second parameter to relaunch the game.
+
+If you want to pack brushes, you will first need to create a new folder in ./unpacked/. The name of that folder will be the name of the brush.
+Any folder in unpacked will be packed.
+See other tutorials for more info on brushes.
