@@ -9,12 +9,12 @@
 		{
 		    "name" : "Update Mod and Launch",
 		    "working_dir" : "$project_path",
-		    "shell_cmd" : "powershell ./.utils/build.ps1 $project_path true"
+		    "shell_cmd" : "powershell ./.utils/build.ps1 true"
 		},
 	    {
 	        "name" : "Update Mod",
 	        "working_dir" : "$project_path",
-	        "shell_cmd" : "powershell ./.utils/build.ps1 $project_path"
+	        "shell_cmd" : "powershell ./.utils/build.ps1"
 	    },
 	    {
 	        "name" : "Run Locally",
