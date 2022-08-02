@@ -3,10 +3,9 @@ $configJSON = Get-Content -Path .\config.JSON |  Out-String | ConvertFrom-Json
 
 $modFoldersPath = $configJSON.ModFoldersPath
 $modPath = Join-Path $modFoldersPath $name
-Write-Output  $modFoldersPath $modPath
 
 copy -r .\template $modFoldersPath
-Rename-Item -Path $modFoldersPath\template -NewName $name -PassThru | Invoke-Item
+Rename-Item -Path $modFoldersPath\template -NewName $name
 
 $SublimeProjectObject = @{
 	folders = @();
@@ -44,8 +43,6 @@ $finishedVSCodeJson = $VSCodeProjectObject | ConvertTo-Json -depth 100 | %{
             param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
                 [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} 
 
-Rename-Item -Path $modFoldersPath\$name\scripts\!mods_preload\template.nut -NewName $name".nut"
-
 $projectPath = Join-Path $modPath "/$name.sublime-project"
 $projectPathVSC = Join-Path $modPath "/.vscode/$name.code-workspace"
 $finishedSublimeJson | Out-File -Encoding UTF8 $projectPath
@@ -58,3 +55,25 @@ $PSScriptRoot\build.ps1 `$modPath `$args[0]
 "
 $buildScript | Out-File -Encoding UTF8 $utilsPath
 
+$preloadPath = Join-Path $modPath "/scripts/!mods_preload/$name.nut" 
+$preloadFile = "::RENAME <- {
+	ID = `"$name`",
+	Name = `"RENAME`",
+	Version = `"1.0.0`"
+}
+::mods_registerMod(::RENAME.ID, ::RENAME.Version)
+
+::mods_queue(::RENAME.ID, null, function()
+{
+	// ::mods_registerJS(::RENAME.ID + '.js'); // Delete if not needed 
+	// ::mods_registerCSS(::RENAME.ID + '.css'); // Delete if not needed 
+	// ::RENAME.Mod <- ::MSU.Class.Mod(::RENAME.ID, ::RENAME.Version, ::RENAME.Name); // Delete if not needed 
+
+})
+"
+$Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
+[System.IO.File]::WriteAllLines($preloadPath, $preloadFile, $Utf8NoBomEncoding)
+
+mkdir $modFoldersPath\$name\unpacked
+
+Invoke-Item $modFoldersPath\$name
