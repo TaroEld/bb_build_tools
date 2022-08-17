@@ -79,7 +79,11 @@ foreach ($file in Get-ChildItem -Path $modPath\tempfolder -Recurse -Force -File)
 }
 Remove-Item $modPath\tempfolder -Recurse
 
-stopIfBadCode
+if ($break -eq -2)
+{
+	Write-Output "Exiting..."
+	exit
+}
 
 Write-Output "Successfully compiled files"
 
