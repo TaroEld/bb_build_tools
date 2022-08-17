@@ -24,6 +24,7 @@ To build the zip and copy it into data, press ctrl+shift+b in sublime or VSCode 
 You can switch projects in sublime with "ctrl+shift+o".
 Alternatively, call build.ps1 while passing the path of the mod folder, and "true" as a second parameter to relaunch the game.
 
-If you want to pack brushes, you will first need to create a new folder in ./unpacked/. The name of that folder will be the name of the brush.
-Any folder in unpacked will be packed.
-See other tutorials for more info on brushes.
+If you want to pack brushes, you will first need to create a new folder in ./unpacked/. 
+Any folder in unpacked will be packed, the name of that folder will be the name of the brush.
+Within each folder, you need a metadata file with the name of the eventual .png, and the files you want to pack.
+See unpacked_example folder for an example, other tutorials (if we have them) for more info on brushes.

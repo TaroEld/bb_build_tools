@@ -1,0 +1,3 @@
+<brush name="gfx/my_mod.png" version="17">
+  <sprite id="my_brush_id" offsetY="106" f="6440" ic="FF1A94C6" width="80" height="80" img="someFolder\someSprite.png" left="-17" right="23" top="-16" bottom="24" />
+ </brush>
