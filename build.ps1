@@ -78,7 +78,7 @@ foreach ($file in Get-ChildItem -Path $modPath\tempfolder -Recurse -Force -File)
 {	
 	$raw = $file.Basename
 	$path = $file.DirectoryName
-	& sq -o "$path/$raw.cnut" -c "$path/$raw.nut" -e
+	& $SQPath -o "$path/$raw.cnut" -c "$path/$raw.nut" -e
 	if ($LASTEXITCODE -eq -2)
 	{
 		Write-Output "Failed compiling file $raw!"
@@ -114,7 +114,7 @@ foreach ($folder in Get-ChildItem -Path $modPath -Directory -Force)
 		$folderPath = Join-Path $modPath $folder
 		if (Test-Path -Path $folderPath)
 		{
-			7z a archive.zip $folder | out-null
+			& $7zipPath a archive.zip $folder | out-null
 			Write-Output "Adding folder: $folder"
 		}
 	}
