@@ -59,7 +59,8 @@ $finishedVSCodeJson | Out-File -Encoding UTF8 $projectPathVSC
 $utilsPath = Join-Path $modPath "/.utils/build.ps1" 
 $buildScript = "
 `$modPath = Resolve-Path (Join-Path `$PSScriptRoot '..')
-$PSScriptRoot\build.ps1 `$modPath `$args[0]
+`$buildPath = Resolve-Path (Join-Path '$PSScriptRoot' '\build.ps1')
+& `$buildPath `$modPath `$args[0]
 "
 $buildScript | Out-File -Encoding UTF8 $utilsPath
 
