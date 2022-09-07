@@ -24,10 +24,29 @@ if ($bootAfterDone -eq "true")
 
 $utilsPath = $PSScriptRoot
 $masscompilePath = Join-Path $utilsPath \modtools\superior_masscompile.bat
+$7zipPath = Join-Path $utilsPath \modtools\7zr.exe
 $SQPath = Join-Path $utilsPath \modtools\sq.exe
 $packBrushPath = Join-Path $utilsPath pack_brush.ps1
 $configPath = Join-Path $utilsPath config.JSON
 $configJSON = Get-Content -Path $configPath | ConvertFrom-Json
+if ($configJSON.ModFoldersPath -eq "")
+{
+	Write-Output '
+	ERROR: Mods Path not specified!
+	Run bb_build/config.ps1 with -ModsPath "path/to/mods". Example:
+		 config.ps1 -ModsPath "G:/Games/BB/Mods"
+	Exiting...'
+	exit
+}
+if ($configJSON.GamePath -eq "")
+{
+	Write-Output '
+	ERROR: Game Path not specified!
+	Run bb_build/config.ps1 with -GamePath "path/to/mods". Example:
+		 config.ps1 -GamePath "G:/Games/BB/BattleBrothers"
+	Exiting...'
+	exit
+}
 $gamePath = $configJSON.GamePath
 $path_to_data = Join-Path $gamePath data
 $path_to_exe = Join-Path $gamePath win32\BattleBrothers.exe

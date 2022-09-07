@@ -1,6 +1,14 @@
 $name = $args[0];
 $configJSON = Get-Content -Path .\config.JSON |  Out-String | ConvertFrom-Json
-
+if ($configJSON.ModFoldersPath -eq "")
+{
+	Write-Output '
+	ERROR: Mods Path not specified!
+	Run bb_build/config.ps1 with -ModsPath "path/to/mods". Example:
+		 config.ps1 -ModsPath "G:/Games/BB/Mods"
+	Exiting...'
+	exit
+}
 $modFoldersPath = $configJSON.ModFoldersPath
 $modPath = Join-Path $modFoldersPath $name
 
