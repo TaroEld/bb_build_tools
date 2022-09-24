@@ -114,7 +114,7 @@ foreach ($folder in Get-ChildItem -Path $modPath -Directory -Force)
 		$folderPath = Join-Path $modPath $folder
 		if (Test-Path -Path $folderPath)
 		{
-			& $7zipPath a archive.zip $folder | out-null
+			Compress-Archive -Update -DestinationPath archive.zip -Path $folder
 			Write-Output "Adding folder: $folder"
 		}
 	}
@@ -130,4 +130,4 @@ if ($bootAfterDone -eq "true")
 	Write-Output "Starting the game..."
 	Start-Process $path_to_exe
 }
-Write-Output "Done!"
+Write-Output "Done!"	

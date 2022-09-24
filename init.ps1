@@ -51,10 +51,8 @@ $finishedVSCodeJson = $VSCodeProjectObject | ConvertTo-Json -depth 100 | %{
             param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
                 [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} 
 
-$projectPath = Join-Path $modPath "/$name.sublime-project"
-$projectPathVSC = Join-Path $modPath "/.vscode/$name.code-workspace"
-$finishedSublimeJson | Out-File -Encoding UTF8 $projectPath
-$finishedVSCodeJson | Out-File -Encoding UTF8 $projectPathVSC
+$finishedSublimeJson | Out-File -Encoding UTF8 (Join-Path $modPath "/$name.sublime-project")
+$finishedVSCodeJson | Out-File -Encoding UTF8 (Join-Path $modPath "/.vscode/$name.code-workspace")
 
 $utilsPath = Join-Path $modPath "/.utils/build.ps1" 
 $buildScript = "
@@ -65,21 +63,8 @@ $buildScript = "
 $buildScript | Out-File -Encoding UTF8 $utilsPath
 
 $preloadPath = Join-Path $modPath "/scripts/!mods_preload/$name.nut" 
-$preloadFile = "::RENAME <- {
-	ID = `"$name`",
-	Name = `"RENAME`",
-	Version = `"1.0.0`"
-}
-::mods_registerMod(::RENAME.ID, ::RENAME.Version)
-
-::mods_queue(::RENAME.ID, null, function()
-{
-	// ::mods_registerJS(::RENAME.ID + '.js'); // Delete if not needed 
-	// ::mods_registerCSS(::RENAME.ID + '.css'); // Delete if not needed 
-	// ::RENAME.Mod <- ::MSU.Class.Mod(::RENAME.ID, ::RENAME.Version, ::RENAME.Name); // Delete if not needed 
-
-})
-"
+$preloadFile = Get-Content "./assets/template_preload.nut" 
+$preloadFile[1] = "        ID = ""$name"""
 $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
 [System.IO.File]::WriteAllLines($preloadPath, $preloadFile, $Utf8NoBomEncoding)
 
