@@ -26,9 +26,15 @@ Configure the paths to the game and your 'mods' folder by running ./config.ps1:
 		config.ps1 -FolderPaths "F:\MODDING\basegame\scripts","G:\Games\BB\Mods\WIP\mod_msu"'
 
 To create a new mod:
-Run ./init.ps1 mod_mymod" from powershell to create a new folder, where mod_mymod is the modname. If you want spaces in your modname, add "" around it.
+Run ./init.ps1 mod_mymod" from powershell to create a new folder, where mod_mymod is the modname. If you want spaces in your modname, add "" around it (don't do spaces in paths please).
 The resulting folder will be opened. Edit the RENAME variables in scripts/mods_preload/.nut. You can doubleclick on the sublime-project file, or the 
 code-workspace file in .vscode/ to open the project in the editor.
+
+To initialise the editor build scripts:
+	Sublime: Copy ./bb_build/bb_build.sublime-build into the sublime builds folder. This is found under %APPDATA%\Roaming\Sublime Text\Packages\User
+		Then, in sublime, open settings (top left) -> tools -> build system -> bb_build
+	VSCode: copy ./tasks.json to the vscode user tasks folder. This is found under %APPDATA%\Roaming\Code\User . If you already defined custom tasks, you can just add them there.
+		You can also edit the user tasks by going ctrl+shift+P -> Tasks: Open User Tasks
 
 To build the zip and copy it into data, press ctrl+shift+b in sublime or VSCode while in the project. 
 	"Update mod" will only replace the new zip in data with a fresh one. 

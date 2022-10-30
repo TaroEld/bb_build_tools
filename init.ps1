@@ -25,10 +25,10 @@ $VSCodeProjectObject = @{
 	folders = @();
 	settings = @();
 }
-foreach ($buildSystem in $configJSON.build_systems)
-{ 
-	$SublimeProjectObject.build_systems += $buildSystem
-}
+
+$SublimeProjectObject.folders += [pscustomobject]@{ path = $modPath }
+$VSCodeProjectObject.folders += [pscustomobject]@{ path = $modPath }
+
 
 foreach ($folder in $configJSON.FolderPaths)
 { 
@@ -37,8 +37,6 @@ foreach ($folder in $configJSON.FolderPaths)
 }
 
 
-$SublimeProjectObject.folders += [pscustomobject]@{ path = $modPath }
-$VSCodeProjectObject.folders += [pscustomobject]@{ path = $modPath }
 
 
 $finishedSublimeJson = $SublimeProjectObject | ConvertTo-Json -depth 100 | ForEach-Object{
@@ -55,14 +53,6 @@ $finishedVSCodeJson = $VSCodeProjectObject | ConvertTo-Json -depth 100 | ForEach
 
 $finishedSublimeJson | Out-File -Encoding UTF8 (Join-Path $modPath "/$modName.sublime-project")
 $finishedVSCodeJson | Out-File -Encoding UTF8 (Join-Path $modPath "/.vscode/$modName.code-workspace")
-
-$utilsPath = Join-Path $modPath "/.utils/build.ps1" 
-$buildScript = "
-`$modPath = Resolve-Path (Join-Path `$PSScriptRoot '..')
-`$buildPath = Resolve-Path (Join-Path '$PSScriptRoot' '\build.ps1')
-& `$buildPath `$modPath `$args[0]
-"
-$buildScript | Out-File -Encoding UTF8 $utilsPath
 
 $preloadPath = Join-Path $modPath "/scripts/!mods_preload/$modName.nut" 
 $preloadFile = Get-Content "./assets/template_preload.nut" 
