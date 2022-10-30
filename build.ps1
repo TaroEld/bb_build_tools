@@ -106,7 +106,6 @@ foreach ($file in (getAllScriptFilesOfType -filePath $modPath -type ".nut"))
         }
 	}
 }
-Remove-Item $modPath\tempfolder -Recurse
 
 if ($break -eq -2)
 {
