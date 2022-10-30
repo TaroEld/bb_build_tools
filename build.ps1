@@ -4,14 +4,6 @@ param(
 )
 
 
-function stopIfBadCode([int] $badCode) {
-	if ($LASTEXITCODE -eq $badCode)
-	{
-		Write-Output "Exiting..."
-		exit
-	}
-}
-
 $command = "Building mod $modPath"
 if ($bootAfterDone -eq "true")
 {
