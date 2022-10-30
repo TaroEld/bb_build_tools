@@ -5,87 +5,23 @@ param(
 	[string[]] $FolderPaths
 )
 
+$buildPath = (Join-Path $PSScriptRoot "\build.ps1").replace("\", "\\");
+$sqPath = (Join-Path $PSScriptRoot "\modtools\sq.exe").replace("\", "\\");
+
+(Get-Content (Join-Path $PSScriptRoot "./assets/sublime_template")) -replace("BUILDPATH", $buildPath) -replace("SQPATH", $sqPath) | ForEach-Object{
+    [Regex]::Replace($_, 
+        "(?<!\\)\\u(?<Value>[a-zA-Z0-9]{4})", {
+            param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
+                [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} | Out-File -Encoding UTF8 $PSScriptRoot/bb_build.sublime-build
+
+(Get-Content (Join-Path $PSScriptRoot "./assets/vscode_template")) -replace("BUILDPATH", $buildPath) -replace("SQPATH", $sqPath) | ForEach-Object{
+    [Regex]::Replace($_, 
+        "(?<!\\)\\u(?<Value>[a-zA-Z0-9]{4})", {
+            param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
+                [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} | Out-File -Encoding UTF8 $PSScriptRoot/tasks.json
+
+
 $json = Get-Content $PSScriptRoot\config.json | ConvertFrom-Json 
-$buildPath = Join-Path $PSScriptRoot "\build.ps1";
-$buildPath = $buildPath.replace("\", "\\")
-$sqPath = Join-Path $PSScriptRoot "\modtools\sq.exe";
-$sqPath = $sqPath.replace("\", "\\")
-
-$verbatimSublimeBuildTools = "
-{
-	`"working_dir`":  `"`$project_path`",
-	`"selector`": `"source.squirrel`",
-	`"variants`": [
-		{
-		    `"name`" : `"Update Mod and Launch`",
-		    `"working_dir`" : `"`$project_path`",
-		    `"shell_cmd`" : `"powershell \`"$buildPath\`" \`"`$project_path\`" true`",
-		},
-	    {
-	        `"name`" : `"Update Mod`",
-	        `"working_dir`" : `"$project_path`",
-	        `"shell_cmd`" : `"powershell \`"$buildPath\`" \`"`$project_path\`" `",
-	    },
-	    {
-	        `"name`" : `"Run Locally`",
-	        `"shell_cmd`":  `"powershell \`"$sqPath\`" `$file`"
-	    },
-
-	],
-}"
-$verbatimVScodeBuildTools = "
-{
-    `"version`": `"2.0.0`",
-    `"tasks`": [
-        {
-            `"label`": `"Update mod`",
-            `"type`": `"shell`",
-            `"command`": `"powershell \`"$buildPath\`" \`"`${fileWorkspaceFolder}\`" `",
-            `"problemMatcher`": [],
-            `"group`": {
-                `"kind`": `"build`",
-                `"isDefault`": true
-            }
-        },
-        {
-            `"label`": `"Update mod and launch`",
-            `"type`": `"shell`",
-            `"command`": `"powershell \`"$buildPath\`" \`"`${fileWorkspaceFolder}\`" true`",
-            `"problemMatcher`": [],
-            `"group`": {
-                `"kind`": `"build`",
-                `"isDefault`": true
-            }
-        },
-        {
-            `"label`": `"Run locally`",
-            `"type`": `"shell`",
-            `"command`": `"powershell \`"$sqPath\`" \`"`${file}\`" `",
-            `"problemMatcher`": [],
-            `"group`": {
-                `"kind`": `"build`",
-                `"isDefault`": false
-            }
-        },
-    ]
-}
-"
-
-$finishedSublimeJson = $verbatimSublimeBuildTools | %{
-    [Regex]::Replace($_, 
-        "(?<!\\)\\u(?<Value>[a-zA-Z0-9]{4})", {
-            param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
-                [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} 
-
-$finishedVSCodeJson = $verbatimVScodeBuildTools | %{
-    [Regex]::Replace($_, 
-        "(?<!\\)\\u(?<Value>[a-zA-Z0-9]{4})", {
-            param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
-                [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} 
-
-$finishedSublimeJson | Out-File -Encoding UTF8 $PSScriptRoot/bb_build.sublime-build
-$finishedVSCodeJson | Out-File -Encoding UTF8 $PSScriptRoot/tasks.json
-
 if ($PSBoundParameters.ContainsKey('ModsPath'))
 {
 	$json.ModFoldersPath = $ModsPath
