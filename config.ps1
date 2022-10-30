@@ -12,13 +12,13 @@ $sqPath = (Join-Path $PSScriptRoot "\modtools\sq.exe").replace("\", "\\");
     [Regex]::Replace($_, 
         "(?<!\\)\\u(?<Value>[a-zA-Z0-9]{4})", {
             param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
-                [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} | Out-File -Encoding UTF8 $PSScriptRoot/bb_build.sublime-build
+                [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} | Out-File -Encoding UTF8 $PSScriptRoot/assets/bb_build.sublime-build
 
 (Get-Content (Join-Path $PSScriptRoot "./assets/vscode_template")) -replace("BUILDPATH", $buildPath) -replace("SQPATH", $sqPath) | ForEach-Object{
     [Regex]::Replace($_, 
         "(?<!\\)\\u(?<Value>[a-zA-Z0-9]{4})", {
             param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
-                [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} | Out-File -Encoding UTF8 $PSScriptRoot/tasks.json
+                [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} | Out-File -Encoding UTF8 $PSScriptRoot/assets/tasks.json
 
 
 $json = Get-Content $PSScriptRoot\config.json | ConvertFrom-Json 
