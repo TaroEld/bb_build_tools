@@ -43,34 +43,45 @@ if ($configJSON.GamePath -eq "")
 	Exiting...'
 	exit
 }
+
+
 $gamePath = $configJSON.GamePath
-$path_to_data = Join-Path $gamePath data
-$path_to_exe = Join-Path $gamePath win32\BattleBrothers.exe
+$pathToData = Join-Path $gamePath data
+$pathToExe = Join-Path $gamePath win32\BattleBrothers.exe
 $name = Split-Path -Path $modPath -Leaf
 
 $excludedZipFolders = ".git",".github","unpacked",".vscode",".utils"
 $excludedScriptFolders = ".git",".github","gfx","ui","preload","brushes","music","sounds","unpacked","tempfolder",".vscode","nexus", ".utils"
-if(Test-Path -Path $modPath\$name.zip)
+
+# Remove old .zip
+if (Test-Path -Path $modPath\$name.zip)
 {
-	del $modPath\$name.zip
+	Remove-Item $modPath\$name.zip
+}
+
+# Call the pack brush .ps1; exit if it returns an error
+& "$packBrushPath" $modPath
+if ($LASTEXITCODE -eq -2)
+{
+	Write-Output "Exiting..."
+	exit
 }
 
 
-& "$packBrushPath" $modPath
-stopIfBadCode
-
-mkdir $modPath\tempfolder | out-null
-
-foreach ($folder in Get-ChildItem -Path $modPath -Directory -Force)
-{
-	if (($excludedScriptFolders -match $folder.Name).Length -eq 0)
-	{             
-		copy -r $folder $modPath\tempfolder\ 
-	}
+# Get all .nut files in designated folders
+function getAllScriptFilesOfType{
+	param(
+		[string]$filePath,
+		[string]$type
+	)
+	$files = Get-ChildItem -Path $filePath -Directory -Force | Where-Object {
+	($excludedScriptFolders -contains $_.Name) -eq $False
+	} | Get-ChildItem -Recurse -Force -File | Where-Object { $_.Extension -eq $type}
+	return $files;
 }
 
 $break = 0
-foreach ($file in Get-ChildItem -Path $modPath\tempfolder -Recurse -Force -File)
+foreach ($file in (getAllScriptFilesOfType -filePath $modPath -type ".nut"))
 {	
 	$raw = $file.Basename
 	$path = $file.DirectoryName
@@ -79,6 +90,10 @@ foreach ($file in Get-ChildItem -Path $modPath\tempfolder -Recurse -Force -File)
 	{
 		Write-Output "Failed compiling file $raw!"
 		$break = -2
+	}
+	else 
+	{
+		Remove-Item "$path/$raw.cnut"
 	}
 	$firstLine = Get-Content $file.FullName -First 1
 	if ($firstLine -match "this\..+ <-")
