@@ -6,6 +6,8 @@ init.ps1: Setup a new mod with folder and editor files. You can configure where 
 build.ps1: Pack files into a zip and transports it to your data folder. Also packs brushes, checks for syntax errors by compiling the files, and checks for some typos (BB classes).
 
 These tools are best used with Sublime Text or VSCode, to make best use of the build scripts.
+Unfortunately, powershell scripts are blocked from being called by default. If you get an error relating to security, you need to change the execution policy. 
+You can do this by running "powershell set-executionpolicy remotesigned" in cmd. Of course, this opens up a security risk, so do it at your own risk.
 
 This is bundled with the BB modkit by Adam Milazzo:
 http://www.adammil.net/blog/v133_Battle_Brothers_mod_kit.html
