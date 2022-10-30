@@ -24,17 +24,18 @@ Configure the paths to the game and your 'mods' folder by running ./config.ps1:
 		Set the path to additional folders that will be included in the project files of sublime or vscode.
 		The paths need to be comma-separated if more than one. For example:
 		config.ps1 -FolderPaths "F:\MODDING\basegame\scripts","G:\Games\BB\Mods\WIP\mod_msu"'
+Any invocation of config will update some paths related to the build process, so if you move this folder, invoke it afterwards.
 
 To create a new mod:
 Run ./init.ps1 mod_mymod" from powershell to create a new folder, where mod_mymod is the modname. If you want spaces in your modname, add "" around it (don't do spaces in paths please).
 The resulting folder will be opened. Edit the RENAME variables in scripts/mods_preload/.nut. You can doubleclick on the sublime-project file, or the 
 code-workspace file in .vscode/ to open the project in the editor.
 
-To initialise the editor build scripts:
-	Sublime: Copy ./bb_build/bb_build.sublime-build into the sublime builds folder. This is found under %APPDATA%\Roaming\Sublime Text\Packages\User
+To initialise the editor build scripts, they must be added to the user-level build scripts of the respective editor.
+	Sublime: Copy ./bb_build/assets/bb_build.sublime-build into the sublime builds folder. This is found under %APPDATA%\Roaming\Sublime Text\Packages\User
 		Then, in sublime, open settings (top left) -> tools -> build system -> bb_build
-	VSCode: copy ./tasks.json to the vscode user tasks folder. This is found under %APPDATA%\Roaming\Code\User . If you already defined custom tasks, you can just add them there.
-		You can also edit the user tasks by going ctrl+shift+P -> Tasks: Open User Tasks
+	VSCode: Copy ./bb_build/assets/tasks.json to the vscode user tasks folder. This is found under %APPDATA%\Roaming\Code\User . 
+		If you already defined custom tasks, you can just add them there by either editing the file directly, or by going ctrl+shift+P -> Tasks: Open User Tasks
 
 To build the zip and copy it into data, press ctrl+shift+b in sublime or VSCode while in the project. 
 	"Update mod" will only replace the new zip in data with a fresh one. 
