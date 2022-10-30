@@ -1,4 +1,6 @@
-$name = $args[0];
+param(
+	[Parameter(Mandatory=$true)][string] $modName
+)
 $configJSON = Get-Content -Path .\config.JSON |  Out-String | ConvertFrom-Json
 if ($configJSON.ModFoldersPath -eq "")
 {
@@ -10,10 +12,10 @@ if ($configJSON.ModFoldersPath -eq "")
 	exit
 }
 $modFoldersPath = $configJSON.ModFoldersPath
-$modPath = Join-Path $modFoldersPath $name
+$modPath = Join-Path $modFoldersPath $modName
 
-copy -r .\template $modFoldersPath
-Rename-Item -Path $modFoldersPath\template -NewName $name
+Copy-Item -r .\template $modFoldersPath
+Rename-Item -Path $modFoldersPath\template -NewName $modName
 
 $SublimeProjectObject = @{
 	folders = @();
@@ -39,20 +41,20 @@ $SublimeProjectObject.folders += [pscustomobject]@{ path = $modPath }
 $VSCodeProjectObject.folders += [pscustomobject]@{ path = $modPath }
 
 
-$finishedSublimeJson = $SublimeProjectObject | ConvertTo-Json -depth 100 | %{
+$finishedSublimeJson = $SublimeProjectObject | ConvertTo-Json -depth 100 | ForEach-Object{
     [Regex]::Replace($_, 
         "(?<!\\)\\u(?<Value>[a-zA-Z0-9]{4})", {
             param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
                 [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} 
 
-$finishedVSCodeJson = $VSCodeProjectObject | ConvertTo-Json -depth 100 | %{
+$finishedVSCodeJson = $VSCodeProjectObject | ConvertTo-Json -depth 100 | ForEach-Object{
     [Regex]::Replace($_, 
         "(?<!\\)\\u(?<Value>[a-zA-Z0-9]{4})", {
             param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
                 [System.Globalization.NumberStyles]::HexNumber))).ToString() } )} 
 
-$finishedSublimeJson | Out-File -Encoding UTF8 (Join-Path $modPath "/$name.sublime-project")
-$finishedVSCodeJson | Out-File -Encoding UTF8 (Join-Path $modPath "/.vscode/$name.code-workspace")
+$finishedSublimeJson | Out-File -Encoding UTF8 (Join-Path $modPath "/$modName.sublime-project")
+$finishedVSCodeJson | Out-File -Encoding UTF8 (Join-Path $modPath "/.vscode/$modName.code-workspace")
 
 $utilsPath = Join-Path $modPath "/.utils/build.ps1" 
 $buildScript = "
@@ -62,12 +64,12 @@ $buildScript = "
 "
 $buildScript | Out-File -Encoding UTF8 $utilsPath
 
-$preloadPath = Join-Path $modPath "/scripts/!mods_preload/$name.nut" 
+$preloadPath = Join-Path $modPath "/scripts/!mods_preload/$modName.nut" 
 $preloadFile = Get-Content "./assets/template_preload.nut" 
-$preloadFile[1] = "        ID = ""$name"""
+$preloadFile[1] = "        ID = ""$modName"","
 $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
 [System.IO.File]::WriteAllLines($preloadPath, $preloadFile, $Utf8NoBomEncoding)
 
-mkdir $modFoldersPath\$name\unpacked
+mkdir $modFoldersPath\$modName\unpacked
 
-Invoke-Item $modFoldersPath\$name
+Invoke-Item $modFoldersPath\$modName
