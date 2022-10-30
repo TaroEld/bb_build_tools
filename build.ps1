@@ -19,12 +19,11 @@ if ($bootAfterDone -eq "true")
 }
 
 $utilsPath = $PSScriptRoot
-$masscompilePath = Join-Path $utilsPath \modtools\superior_masscompile.bat
-$7zipPath = Join-Path $utilsPath \modtools\7zr.exe
 $SQPath = Join-Path $utilsPath \modtools\sq.exe
 $packBrushPath = Join-Path $utilsPath pack_brush.ps1
-$configPath = Join-Path $utilsPath config.JSON
-$configJSON = Get-Content -Path $configPath | ConvertFrom-Json
+
+# Check if config has been defined
+$configJSON = Get-Content -Path (Join-Path $utilsPath config.JSON) | ConvertFrom-Json
 if ($configJSON.ModFoldersPath -eq "")
 {
 	Write-Output '
