@@ -131,13 +131,13 @@ foreach ($folder in Get-ChildItem -Path $modPath -Directory -Force)
 }
 
 Rename-Item -Path $modPath\archive.zip -NewName $name".zip" 
-copy $modPath\$name.zip $path_to_data 
-Write-Output "Copied mod $name.zip to $path_to_data"
+Copy-Item $modPath\$name.zip $pathToData 
+Write-Output "Copied mod $name.zip to $pathToData"
 
 
 if ($bootAfterDone -eq "true")
 {
 	Write-Output "Starting the game..."
-	Start-Process $path_to_exe
+	Start-Process $pathToExe
 }
 Write-Output "Done!"	

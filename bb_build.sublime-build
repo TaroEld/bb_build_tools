@@ -1,22 +1,20 @@
-﻿
-{
+﻿{
 	"working_dir":  "$project_path",
 	"selector": "source.squirrel",
 	"variants": [
 		{
 		    "name" : "Update Mod and Launch",
 		    "working_dir" : "$project_path",
-		    "shell_cmd" : "powershell \"G:\\Games\\BB\\Mods\\WIP\\bb_build\\build.ps1\" \"$project_path\" true",
+		    "shell_cmd" : "powershell \"G:\\Games\\BB\\Mods\\WIP\\bb_build\\build.ps1\" \"$project_path\" true"
 		},
 	    {
 	        "name" : "Update Mod",
 	        "working_dir" : "",
-	        "shell_cmd" : "powershell \"G:\\Games\\BB\\Mods\\WIP\\bb_build\\build.ps1\" \"$project_path\" ",
+	        "shell_cmd" : "powershell \"G:\\Games\\BB\\Mods\\WIP\\bb_build\\build.ps1\" \"$project_path\" "
 	    },
 	    {
 	        "name" : "Run Locally",
 	        "shell_cmd":  "powershell \"G:\\Games\\BB\\Mods\\WIP\\bb_build\\modtools\\sq.exe\" $file"
-	    },
-
-	],
+	    }
+	]
 }

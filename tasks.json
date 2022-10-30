@@ -1,5 +1,4 @@
-﻿
-{
+﻿{
     "version": "2.0.0",
     "tasks": [
         {
@@ -31,7 +30,7 @@
                 "kind": "build",
                 "isDefault": false
             }
-        },
+        }
     ]
 }
 
