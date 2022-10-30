@@ -1,14 +1,14 @@
-This is my collection of scripts to improve the process of working on mods.
+This is my collection of scripts to improve the process of working on mods. It speeds up the creation of new projects and the iterative process of packing files and running the game with an updated version.
+
 There's three main scripts:
 config.ps1: Setup your 'environment'.
 init.ps1: Setup a new mod with folder and editor files. You can configure where the mods are placed, and what folders you want included in your editor project.
-build.ps1: Pack files into a zip and transports it to your data folder. Also checks for syntax errors by compiling the files.
+build.ps1: Pack files into a zip and transports it to your data folder. Also packs brushes, checks for syntax errors by compiling the files, and checks for some typos (BB classes).
 
-Needs Sublime Text or VSCode to make best use of the build scripts.
+These tools are best used with Sublime Text or VSCode, to make best use of the build scripts.
+
 This is bundled with the BB modkit by Adam Milazzo:
 http://www.adammil.net/blog/v133_Battle_Brothers_mod_kit.html
-As well as 7zip:
-https://www.7-zip.org/
 
 How to use:
 Download the .zip file and extract it in some location.
