@@ -1,12 +1,16 @@
-function stopIfBadCode {
-	if ($LASTEXITCODE -eq -2)
+param(
+	[string] $modPath,
+	[Parameter(Mandatory=$false)][string] $bootAfterDone
+)
+
+
+function stopIfBadCode([int] $badCode) {
+	if ($LASTEXITCODE -eq $badCode)
 	{
 		Write-Output "Exiting..."
 		exit
 	}
 }
-$modPath = $args[0];
-$bootAfterDone = $args[1];
 
 $command = "Building mod $modPath"
 if ($bootAfterDone -eq "true")
