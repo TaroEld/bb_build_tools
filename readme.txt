@@ -1,3 +1,5 @@
+OUTDATED; USE https://github.com/TaroEld/BBbuilder
+
 This is my collection of scripts to improve the process of working on mods. It speeds up the creation of new projects and the iterative process of packing files and running the game with an updated version.
 
 There's three main scripts:
